@@ -38,13 +38,11 @@ const MyOwnReact = {
   createElement,
 };
 
-//@ts-ignore
-const element = ReactDOM.createElement(
+const element = React.createElement(
   'div',
   { id: 'foo' },
-  React.createElement('a', null, 'Hello World!'),
+  React.createElement('a', null, 'React APP without CRA!'),
   React.createElement('b')
 );
 
-const container = document.getElementById('root');
-ReactDOM.render(element, container);
+export default element;
