@@ -1,17 +1,20 @@
-import React from 'react';
-
 const TEXT_ELEMENT_TYPE = 'TEXT_ELEMENT';
 
-type element = {
+type elementType = {
   type: string;
-  props: object;
+  props: propsType;
 };
 
+type propsType = {
+  id?: string;
+  children?: elementType[];
+  nodeValue?: string;
+};
 function createElement(
   type: string,
-  props?: object,
+  props?: propsType,
   ...children: any[]
-): element {
+): elementType {
   return {
     type,
     props: {
@@ -23,7 +26,7 @@ function createElement(
   };
 }
 
-function createTextElement(text: string): element {
+function createTextElement(text: string): elementType {
   return {
     type: TEXT_ELEMENT_TYPE,
     props: {
@@ -33,16 +36,35 @@ function createTextElement(text: string): element {
   };
 }
 
-const MyOwnReact = {
+function render(element: elementType, container: HTMLElement | Text): void {
+  const dom =
+    element.type == TEXT_ELEMENT_TYPE
+      ? document.createTextNode('')
+      : document.createElement(element.type);
+
+  const isProperty = (key) => key !== 'children';
+
+  Object.keys(element.props)
+    .filter(isProperty)
+    .forEach((prop) => {
+      dom[prop] = element.props[prop];
+    });
+
+  element.props?.children?.forEach((child) => render(child, dom));
+
+  container.appendChild(dom);
+}
+
+export const MyOwnReact = {
   createElement,
+  render,
 };
 
-/** @jsx MyOwnReact.createElement */
-const element = (
-  <div id="foo">
-    <a>React App without CRA!</a>
-    <b />
-  </div>
+const element = MyOwnReact.createElement(
+  'div',
+  { id: 'foo' },
+  MyOwnReact.createElement('a', null, 'React App without CRA!'),
+  MyOwnReact.createElement('b')
 );
 
 export default element;

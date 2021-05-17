@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom';
-import element from './myownreact';
+import element, { MyOwnReact } from './myownreact';
 
-ReactDOM.render(element, document.getElementById('root'));
+MyOwnReact.render(element, document.getElementById('root'));
