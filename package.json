@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": "delca85/myownreact",
   "author": "delca85",
-  "main": "src/index.tsx",
+  "main": "src/index.ts",
   "keywords": [
     "react"
   ],
