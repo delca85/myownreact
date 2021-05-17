@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 const TEXT_ELEMENT_TYPE = 'TEXT_ELEMENT';
 
@@ -10,7 +9,7 @@ type element = {
 
 function createElement(
   type: string,
-  props: object,
+  props?: object,
   ...children: any[]
 ): element {
   return {
@@ -38,11 +37,12 @@ const MyOwnReact = {
   createElement,
 };
 
-const element = React.createElement(
-  'div',
-  { id: 'foo' },
-  React.createElement('a', null, 'React APP without CRA!'),
-  React.createElement('b')
+/** @jsx MyOwnReact.createElement */
+const element = (
+  <div id="foo">
+    <a>React App without CRA!</a>
+    <b />
+  </div>
 );
 
 export default element;
