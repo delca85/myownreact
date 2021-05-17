@@ -12,7 +12,7 @@ type propsType = {
 };
 function createElement(
   type: string,
-  props?: propsType,
+  props?: object,
   ...children: any[]
 ): elementType {
   return {
@@ -36,23 +36,29 @@ function createTextElement(text: string): elementType {
   };
 }
 
-function render(element: elementType, container: HTMLElement | Text): void {
+function render(
+  element: elementType,
+  container: HTMLElement | Text | null
+): void {
   const dom =
     element.type == TEXT_ELEMENT_TYPE
       ? document.createTextNode('')
       : document.createElement(element.type);
 
-  const isProperty = (key) => key !== 'children';
+  const isProperty = (key: string) => key != 'children';
 
   Object.keys(element.props)
     .filter(isProperty)
     .forEach((prop) => {
+      // @ts-ignore
       dom[prop] = element.props[prop];
     });
 
   element.props?.children?.forEach((child) => render(child, dom));
 
-  container.appendChild(dom);
+  if (container) {
+    container.appendChild(dom);
+  }
 }
 
 export const MyOwnReact = {
@@ -63,7 +69,7 @@ export const MyOwnReact = {
 const element = MyOwnReact.createElement(
   'div',
   { id: 'foo' },
-  MyOwnReact.createElement('a', null, 'React App without CRA!'),
+  MyOwnReact.createElement('a', undefined, 'React App without CRA!'),
   MyOwnReact.createElement('b')
 );
 
