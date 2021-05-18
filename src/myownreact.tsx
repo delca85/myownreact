@@ -1,32 +1,17 @@
-const TEXT_ELEMENT_TYPE = 'TEXT_ELEMENT';
+const TEXT_ELEMENT_TYPE = "TEXT_ELEMENT";
 
-type elementType = {
+type Element = {
   type: string;
-  props: propsType;
+  props: Props;
 };
 
-type propsType = {
+type Props = {
   id?: string;
-  children?: elementType[];
+  children?: Element[];
   nodeValue?: string;
 };
-function createElement(
-  type: string,
-  props?: object,
-  ...children: any[]
-): elementType {
-  return {
-    type,
-    props: {
-      ...props,
-      children: children.map((child) =>
-        typeof child === 'object' ? child : createTextElement(child)
-      ),
-    },
-  };
-}
 
-function createTextElement(text: string): elementType {
+function createTextElement(text: string): Element {
   return {
     type: TEXT_ELEMENT_TYPE,
     props: {
@@ -36,23 +21,41 @@ function createTextElement(text: string): elementType {
   };
 }
 
-function render(
-  element: elementType,
-  container: HTMLElement | Text | null
-): void {
+function createElement(
+  type: string,
+  props?: Props,
+  ...children: any[]
+): Element {
+  return {
+    type,
+    props: {
+      ...props,
+      children: children.map((child) =>
+        typeof child === "object" ? child : createTextElement(child)
+      ),
+    },
+  };
+}
+
+type SubProps = Omit<Props, "children">;
+
+function render(element: Element, container: HTMLElement | Text | null): void {
   const dom =
-    element.type == TEXT_ELEMENT_TYPE
-      ? document.createTextNode('')
+    element.type === TEXT_ELEMENT_TYPE
+      ? document.createTextNode("")
       : document.createElement(element.type);
 
-  const isProperty = (key: string) => key != 'children';
+  const propsCopy: Props = {};
+  const isProperty = (key: keyof Props) => key !== "children";
 
-  Object.keys(element.props)
+  (Object.keys(element.props) as Array<keyof Props>)
     .filter(isProperty)
     .forEach((prop) => {
       // @ts-ignore
-      dom[prop] = element.props[prop];
+      propsCopy[prop] = element.props[prop as keyof Props];
     });
+
+  Object.assign(dom, propsCopy);
 
   element.props?.children?.forEach((child) => render(child, dom));
 
@@ -67,10 +70,10 @@ export const MyOwnReact = {
 };
 
 const element = MyOwnReact.createElement(
-  'div',
-  { id: 'foo' },
-  MyOwnReact.createElement('a', undefined, 'React App without CRA!'),
-  MyOwnReact.createElement('b')
+  "div",
+  { id: "foo" },
+  MyOwnReact.createElement("a", undefined, "React App without CRA!"),
+  MyOwnReact.createElement("b")
 );
 
 export default element;

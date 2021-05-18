@@ -1,3 +1,3 @@
-import element, { MyOwnReact } from './myownreact';
+import element, { MyOwnReact } from "./myownreact";
 
-MyOwnReact.render(element, document.getElementById('root'));
+MyOwnReact.render(element, document.getElementById("root"));

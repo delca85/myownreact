@@ -11,7 +11,9 @@
   ],
   "scripts": {
     "webpack": "webpack",
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "format": "prettier --write src/**/*.ts{,x}",
+    "lint": "tsc --noEmit && eslint src/**/*.ts{,x}"
   },
   "dependencies": {
     "@types/react": "^17.0.5",
@@ -28,6 +30,13 @@
     "@babel/preset-env": "^7.14.2",
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.3.0",
     "react-hot-loader": "^4.13.0"
   },
   "browserslist": {
