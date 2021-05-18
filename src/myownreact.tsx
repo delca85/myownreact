@@ -48,12 +48,13 @@ function render(element: Element, container: HTMLElement | Text | null): void {
   const propsCopy: Props = {};
   const isProperty = (key: keyof Props) => key !== "children";
 
-  (Object.keys(element.props) as Array<keyof Props>)
-    .filter(isProperty)
-    .forEach((prop) => {
-      // @ts-ignore
-      propsCopy[prop] = element.props[prop as keyof Props];
-    });
+  const subKeys = (Object.keys(element.props) as Array<keyof Props>).filter(
+    isProperty
+  ) as unknown as Array<keyof SubProps>;
+
+  subKeys.forEach((prop: keyof SubProps) => {
+    propsCopy[prop] = element.props[prop as keyof Props] as string;
+  });
 
   Object.assign(dom, propsCopy);
 
